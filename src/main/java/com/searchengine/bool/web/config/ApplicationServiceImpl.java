@@ -1,7 +1,8 @@
 package com.searchengine.bool.web.config;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import com.searchengine.bool.anootation.Logging;
-import org.apache.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.ObjectFactory;
@@ -24,7 +25,7 @@ import java.util.Locale;
 @Component("applicationContext")
 public class ApplicationServiceImpl implements ApplicationContextAware, ApplicationService {
 
-    private static Logger logger = Logger.getLogger(ApplicationServiceImpl.class);
+    private static Logger logger = LogManager.getLogger(ApplicationServiceImpl.class);
 
     private static ApplicationContext ctx           = null;
     private static MessageSource      messageSource = null;
