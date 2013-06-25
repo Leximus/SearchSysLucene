@@ -44,20 +44,30 @@ public class SearchService {
     private static IndexReader reader;
     private static IndexSearcher searcher;
     private static Analyzer analyzer;
+    private static boolean isInit = false;
     
-    static {
-        try {
-            reader = DirectoryReader.open(
-                    FSDirectory.open(new File(SearchConfig.getInstance().getProperty("search.index"))));
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
+//    static {
+//
+//    }
+
+
+    public static void initialize() throws IOException {
+
+        reader = DirectoryReader.open(
+                FSDirectory.open(new File(SearchConfig.getInstance().getProperty("search.index"))));
         searcher = new IndexSearcher(reader);
         analyzer = new StandardAnalyzer(Version.LUCENE_43);
         CachedResult.setIndexSearcher(searcher);
+        isInit = true;
     }
 
+    public boolean isInit() {
+        return isInit;
+    }
+
+    public void setInit(boolean init) {
+        isInit = init;
+    }
 
     public static ScoreDoc[] findDocuments(String queryStr) throws Exception {
         String field = SearchConfig.getInstance().getProperty("search.field");
@@ -100,7 +110,11 @@ public class SearchService {
         ScoreDoc[] hits = results.scoreDocs;
 
         int numTotalHits = results.totalHits;
+
         System.out.println(numTotalHits + " total matching documents");
+        if (numTotalHits == 0) {
+            return new ScoreDoc[0];
+        }
 
         int start = 0;
         int end = Math.min(numTotalHits, hitsPerPage);
@@ -135,7 +149,7 @@ public class SearchService {
     }
 
 
-    public static void createIndex() {
+    public static void createIndex() throws Exception {
 
         /** Index all text files under a directory. */
         String usage = "java org.apache.lucene.demo.IndexFiles"
@@ -146,9 +160,9 @@ public class SearchService {
         String docsPath = null;
         boolean create = true;
 
-        indexPath = "index";
+        indexPath = SearchConfig.getInstance().getProperty("search.index");
 
-        docsPath = "";
+        docsPath = SearchConfig.getInstance().getProperty("document.dir");
         create = false;
 
         final File docDir = new File(docsPath);
@@ -161,12 +175,8 @@ public class SearchService {
         System.out.println("Indexing to directory '" + indexPath + "'...");
 
         Directory dir = null;
-        try {
-            dir = FSDirectory.open(new File(indexPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
+
+        dir = FSDirectory.open(new File(indexPath));
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_40);
         IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_40, analyzer);
 
@@ -187,13 +197,9 @@ public class SearchService {
         // iwc.setRAMBufferSizeMB(256.0);
 
         IndexWriter writer = null;
-        try {
-            writer = new IndexWriter(dir, iwc);
-            indexDocs(writer, docDir);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
+
+        writer = new IndexWriter(dir, iwc);
+        indexDocs(writer, docDir);
 
         // NOTE: if you want to maximize search performance,
         // you can optionally call forceMerge here.  This can be
@@ -202,13 +208,7 @@ public class SearchService {
         // you're done adding documents to it):
         //
         // writer.forceMerge(1);
-
-        try {
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
+        writer.close();
 
         Date end = new Date();
         System.out.println(end.getTime() - start.getTime() + " total milliseconds");
