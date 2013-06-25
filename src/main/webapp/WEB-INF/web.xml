@@ -4,20 +4,26 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
 
-    <context-param>
-        <param-name>log4jConfigLocation</param-name>
-        <param-value>classpath:log4j.xml</param-value>
-    </context-param>
+    <!--<context-param>-->
+        <!--<param-name>log4jConfigLocation</param-name>-->
+        <!--<param-value>classpath:log4j2.xml</param-value>-->
+    <!--</context-param>-->
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:repository/spring-jdbc.xml</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>log4jConfiguration</param-name>
+        <param-value>classpath:log4j2.xml</param-value>
+    </context-param>
+    <!--<listener>-->
+        <!--<listener-class>org.apache.logging.log4j.core.web.Log4jContextListener</listener-class>-->
+    <!--</listener>-->
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
-
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -25,14 +31,14 @@
     <!--<servlet>-->
         <!--<servlet-name>default</servlet-name>-->
         <!--<servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>-->
-        <!--<init-param>-->
+        <!--<initialize-param>-->
             <!--<param-name>debug</param-name>-->
             <!--<param-value>0</param-value>-->
-        <!--</init-param>-->
-        <!--<init-param>-->
+        <!--</initialize-param>-->
+        <!--<initialize-param>-->
             <!--<param-name>listings</param-name>-->
             <!--<param-value>false</param-value>-->
-        <!--</init-param>-->
+        <!--</initialize-param>-->
         <!--<load-on-startup>1</load-on-startup>-->
     <!--</servlet>-->
 
