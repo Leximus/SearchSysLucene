@@ -30,12 +30,13 @@ public class SearchConfig {
     // possible states
 //    private enum ENV { INT, UAT, PROD, LOCAL };
 
+
     // we want to load the file only once, so use static
     private static boolean isInitialized = false;
     private static Properties properties;
 
 //    private ENV envSetting;
-    private String keyPrefix;
+    private String keyPrefix = "";
     private boolean doLogging = true;
 
 //    private QueryRunner queryRunner = new QueryRunner();

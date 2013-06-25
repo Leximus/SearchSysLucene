@@ -7,21 +7,9 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.LongField;
-import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.*;
-import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.*;
-import java.util.Date;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -46,12 +33,18 @@ public class SearchController {
 
     private static Logger logger = LogManager.getLogger(SearchController.class);
 
-    private IndexReader reader;
-    private IndexSearcher searcher;
-    private Analyzer analyzer;
-
     public SearchController() {
-        SearchService.createIndex();
+        File f = new File(SearchConfig.getInstance().getProperty("search.index"));
+
+        try {
+            if (!f.exists()) {
+                SearchService.createIndex();
+            }
+            SearchService.initialize();
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e);
+        }
     }
 
 

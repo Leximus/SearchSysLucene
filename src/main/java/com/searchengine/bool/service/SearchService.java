@@ -1,5 +1,6 @@
 package com.searchengine.bool.service;
 
+import com.searchengine.bool.anootation.LoggingAfter;
 import com.searchengine.bool.anootation.LoggingBefore;
 import com.searchengine.bool.config.SearchConfig;
 import com.searchengine.bool.web.controller.CachedResult;
@@ -44,20 +45,31 @@ public class SearchService {
     private static IndexReader reader;
     private static IndexSearcher searcher;
     private static Analyzer analyzer;
+    private static boolean isInit = false;
     
-    static {
-        try {
-            reader = DirectoryReader.open(
-                    FSDirectory.open(new File(SearchConfig.getInstance().getProperty("search.index"))));
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
+//    static {
+//
+//    }
+
+
+    @LoggingBefore("initialize SearchService")
+    @LoggingAfter("SearchService initialized")
+    public static void initialize() throws IOException {
+        reader = DirectoryReader.open(
+                FSDirectory.open(new File(SearchConfig.getInstance().getProperty("search.index"))));
         searcher = new IndexSearcher(reader);
         analyzer = new StandardAnalyzer(Version.LUCENE_43);
         CachedResult.setIndexSearcher(searcher);
+        isInit = true;
     }
 
+    public boolean isInit() {
+        return isInit;
+    }
+
+    public void setInit(boolean init) {
+        isInit = init;
+    }
 
     public static ScoreDoc[] findDocuments(String queryStr) throws Exception {
         String field = SearchConfig.getInstance().getProperty("search.field");
@@ -100,7 +112,11 @@ public class SearchService {
         ScoreDoc[] hits = results.scoreDocs;
 
         int numTotalHits = results.totalHits;
+
         System.out.println(numTotalHits + " total matching documents");
+        if (numTotalHits == 0) {
+            return new ScoreDoc[0];
+        }
 
         int start = 0;
         int end = Math.min(numTotalHits, hitsPerPage);
@@ -135,8 +151,12 @@ public class SearchService {
     }
 
 
-    public static void createIndex() {
+    @LoggingBefore("Creating index")
+    @LoggingAfter("Index created")
+    public static void createIndex() throws Exception {
 
+        logger.info("Creating index");
+        System.out.println("Creating index");
         /** Index all text files under a directory. */
         String usage = "java org.apache.lucene.demo.IndexFiles"
                 + " [-index INDEX_PATH] [-docs DOCS_PATH] [-update]\n\n"
@@ -146,27 +166,24 @@ public class SearchService {
         String docsPath = null;
         boolean create = true;
 
-        indexPath = "index";
+        indexPath = SearchConfig.getInstance().getProperty("search.index");
 
-        docsPath = "";
+        docsPath = SearchConfig.getInstance().getProperty("document.dir");
         create = false;
 
         final File docDir = new File(docsPath);
         if (!docDir.exists() || !docDir.canRead()) {
-            System.out.println("Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
+            logger.error("Document directory '" + docDir.getAbsolutePath() +
+                    "' does not exist or is not readable, please check the path");
             System.exit(1);
         }
 
         Date start = new Date();
-        System.out.println("Indexing to directory '" + indexPath + "'...");
+        logger.info("Indexing to directory '" + indexPath + "'...");
 
         Directory dir = null;
-        try {
-            dir = FSDirectory.open(new File(indexPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
+
+        dir = FSDirectory.open(new File(indexPath));
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_40);
         IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_40, analyzer);
 
@@ -187,13 +204,9 @@ public class SearchService {
         // iwc.setRAMBufferSizeMB(256.0);
 
         IndexWriter writer = null;
-        try {
-            writer = new IndexWriter(dir, iwc);
-            indexDocs(writer, docDir);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
+
+        writer = new IndexWriter(dir, iwc);
+        indexDocs(writer, docDir);
 
         // NOTE: if you want to maximize search performance,
         // you can optionally call forceMerge here.  This can be
@@ -202,16 +215,11 @@ public class SearchService {
         // you're done adding documents to it):
         //
         // writer.forceMerge(1);
-
-        try {
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e);
-        }
+        writer.close();
 
         Date end = new Date();
         System.out.println(end.getTime() - start.getTime() + " total milliseconds");
+        logger.info("Index created");
     }
 
     /**
@@ -287,7 +295,7 @@ public class SearchService {
                         // Existing index (an old copy of this document may have been indexed) so
                         // we use updateDocument instead to replace the old one matching the exact
                         // path, if present:
-                        System.out.println("updating " + file);
+                        logger.info("updating " + file);
                         writer.updateDocument(new Term("path", file.getPath()), doc);
                     }
 

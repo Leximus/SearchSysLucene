@@ -1,5 +1,7 @@
 package com.searchengine.bool;
 
+import com.searchengine.bool.config.SearchConfig;
+import com.searchengine.bool.web.controller.SearchController;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -18,6 +20,7 @@ public class Main {
 
         logger.info("sdsdsd");
         logger.error("2332323123");
+        SearchController controller = new SearchController();
 //        List<Document> documents = new ArrayList<Document>(4);
 //
 //        documents.add(new Document(" the next door"));

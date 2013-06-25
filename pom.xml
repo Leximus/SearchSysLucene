@@ -86,7 +86,7 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <version>${maven-war-plugin.version}</version>
                     <configuration>
-                        <!--<outputDirectory>C:\Program Files (x86)\apache-tomcat-6.0.32\webapps</outputDirectory>-->
+                        <outputDirectory>C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps</outputDirectory>
                         <!--<webappDirectory>C:\Program Files\apache-tomcat-7.0.26\webapps\search-engine-1.0</webappDirectory>-->
                     </configuration>
                 </plugin>
