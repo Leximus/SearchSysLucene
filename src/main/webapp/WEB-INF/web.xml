@@ -5,8 +5,8 @@
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
 
     <!--<context-param>-->
-        <!--<param-name>log4jConfigLocation</param-name>-->
-        <!--<param-value>classpath:log4j2.xml</param-value>-->
+    <!--<param-name>log4jConfigLocation</param-name>-->
+    <!--<param-value>classpath:log4j2.xml</param-value>-->
     <!--</context-param>-->
 
     <context-param>
@@ -15,12 +15,13 @@
     </context-param>
 
     <context-param>
-        <param-name>log4jConfiguration</param-name>
+        <param-name>log4j2Configuration</param-name>
         <param-value>classpath:log4j2.xml</param-value>
     </context-param>
-    <!--<listener>-->
-        <!--<listener-class>org.apache.logging.log4j.core.web.Log4jContextListener</listener-class>-->
-    <!--</listener>-->
+
+    <listener>
+        <listener-class>org.apache.logging.log4j.core.web.Log4jContextListener</listener-class>
+    </listener>
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
@@ -29,17 +30,17 @@
     </listener>
 
     <!--<servlet>-->
-        <!--<servlet-name>default</servlet-name>-->
-        <!--<servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>-->
-        <!--<initialize-param>-->
-            <!--<param-name>debug</param-name>-->
-            <!--<param-value>0</param-value>-->
-        <!--</initialize-param>-->
-        <!--<initialize-param>-->
-            <!--<param-name>listings</param-name>-->
-            <!--<param-value>false</param-value>-->
-        <!--</initialize-param>-->
-        <!--<load-on-startup>1</load-on-startup>-->
+    <!--<servlet-name>default</servlet-name>-->
+    <!--<servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>-->
+    <!--<initialize-param>-->
+    <!--<param-name>debug</param-name>-->
+    <!--<param-value>0</param-value>-->
+    <!--</initialize-param>-->
+    <!--<initialize-param>-->
+    <!--<param-name>listings</param-name>-->
+    <!--<param-value>false</param-value>-->
+    <!--</initialize-param>-->
+    <!--<load-on-startup>1</load-on-startup>-->
     <!--</servlet>-->
 
     <servlet-mapping>
@@ -90,4 +91,3 @@
     </welcome-file-list>
 
 </web-app>
-

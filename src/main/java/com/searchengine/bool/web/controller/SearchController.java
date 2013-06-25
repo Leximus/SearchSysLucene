@@ -34,6 +34,14 @@ public class SearchController {
     private static Logger logger = LogManager.getLogger(SearchController.class);
 
     public SearchController() {
+        logger.info("aaaaaaaaaaaaaaa");
+        logger.error("bbbbbbbbbbbbbbbbb");
+        logger.error("bbbbbbbbbbbbbbbbb");
+        logger.error("bbbbbbbbbbbbbbbbb");
+        logger.error("bbbbbbbbbbbbbbbbb");
+        logger.error("bbbbbbbbbbbbbbbbb");
+        logger.error("bbbbbbbbbbbbbbbbb");
+
         File f = new File(SearchConfig.getInstance().getProperty("search.index"));
 
         try {

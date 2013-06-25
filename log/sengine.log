@@ -20,3 +20,10 @@
 [2013-06-25 18:10:58,152 ERROR c.s.b.Main.main] 2332323123
 [2013-06-25 18:14:12,011 INFO c.s.b.Main.main] sdsdsd
 [2013-06-25 18:14:12,012 ERROR c.s.b.Main.main] 2332323123
+[2013-06-25 21:06:10,839 INFO c.s.b.w.c.SearchController.main] aaaaaaaaaaaaaaa
+[2013-06-25 21:06:10,844 ERROR c.s.b.w.c.SearchController.main] bbbbbbbbbbbbbbbbb
+[2013-06-25 21:06:10,846 ERROR c.s.b.w.c.SearchController.main] bbbbbbbbbbbbbbbbb
+[2013-06-25 21:06:10,846 ERROR c.s.b.w.c.SearchController.main] bbbbbbbbbbbbbbbbb
+[2013-06-25 21:06:10,846 ERROR c.s.b.w.c.SearchController.main] bbbbbbbbbbbbbbbbb
+[2013-06-25 21:06:10,847 ERROR c.s.b.w.c.SearchController.main] bbbbbbbbbbbbbbbbb
+[2013-06-25 21:06:10,848 ERROR c.s.b.w.c.SearchController.main] bbbbbbbbbbbbbbbbb
