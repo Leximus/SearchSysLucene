@@ -1,5 +1,8 @@
 package com.searchengine.bool;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 /**
  * Created with IntelliJ IDEA.
  * User: avvolkov
@@ -9,7 +12,12 @@ package com.searchengine.bool;
  */
 public class Main {
 
+    private static Logger logger = LogManager.getLogger(Main.class);
+
     public static void main(String[] args) {
+
+        logger.info("sdsdsd");
+        logger.error("2332323123");
 //        List<Document> documents = new ArrayList<Document>(4);
 //
 //        documents.add(new Document(" the next door"));
