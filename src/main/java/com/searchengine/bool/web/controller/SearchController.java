@@ -59,6 +59,7 @@ public class SearchController {
     @RequestMapping("/searchQuery")
     public ModelAndView queryHandler(@RequestParam("query") String query) throws Exception{
         query = StringEscapeUtils.unescapeHtml(query);
+        query = new String(query.getBytes("iso-8859-1"), "utf-8");
         System.out.println("query: " + query);
 
         ModelAndView mav = new ModelAndView("searchResult");

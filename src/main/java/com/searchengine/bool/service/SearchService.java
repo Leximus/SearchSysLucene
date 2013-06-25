@@ -81,7 +81,7 @@ public class SearchService {
         BufferedReader in = null;
 
         in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
-        QueryParser parser = new QueryParser(Version.LUCENE_40, field, analyzer);
+        QueryParser parser = new QueryParser(Version.LUCENE_43, field, analyzer);
 
 
         String line = queryStr;
@@ -177,8 +177,8 @@ public class SearchService {
         Directory dir = null;
 
         dir = FSDirectory.open(new File(indexPath));
-        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_40);
-        IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_40, analyzer);
+        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_43);
+        IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_43, analyzer);
 
         if (create) {
             // Create a new index in the directory, removing any

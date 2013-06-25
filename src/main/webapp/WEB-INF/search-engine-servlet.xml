@@ -28,7 +28,7 @@
 
     <!--<repository:load-time-weaver/>-->
 
-    <!--<aop:spring-configured/>-->
+    <aop:spring-configured/>
 
     <!--<aop:aspectj-autoproxy/>-->
 
