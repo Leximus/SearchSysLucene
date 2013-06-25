@@ -34,6 +34,7 @@ public class SearchController {
     private static Logger logger = LogManager.getLogger(SearchController.class);
 
     public SearchController() {
+<<<<<<< HEAD
         logger.info("aaaaaaaaaaaaaaa");
         logger.error("bbbbbbbbbbbbbbbbb");
         logger.error("bbbbbbbbbbbbbbbbb");
@@ -42,6 +43,8 @@ public class SearchController {
         logger.error("bbbbbbbbbbbbbbbbb");
         logger.error("bbbbbbbbbbbbbbbbb");
 
+=======
+>>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
         File f = new File(SearchConfig.getInstance().getProperty("search.index"));
 
         try {
@@ -59,7 +62,10 @@ public class SearchController {
     @RequestMapping("/searchQuery")
     public ModelAndView queryHandler(@RequestParam("query") String query) throws Exception{
         query = StringEscapeUtils.unescapeHtml(query);
+<<<<<<< HEAD
         query = new String(query.getBytes("iso-8859-1"), "utf-8");
+=======
+>>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
         System.out.println("query: " + query);
 
         ModelAndView mav = new ModelAndView("searchResult");

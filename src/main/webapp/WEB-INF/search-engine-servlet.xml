@@ -28,7 +28,11 @@
 
     <!--<repository:load-time-weaver/>-->
 
+<<<<<<< HEAD
     <aop:spring-configured/>
+=======
+    <!--<aop:spring-configured/>-->
+>>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
 
     <!--<aop:aspectj-autoproxy/>-->
 

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration status="WARN" monitorInterval="30">
     <properties>
+<<<<<<< HEAD
         <property name="filename">C:\Program Files (x86)\apache-tomcat-6.0.32\webapps\sengine\WEB-INF\log\sengine.log</property>
+=======
+        <property name="filename">log/sengine.log</property>
+>>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
     </properties>
 
     <appenders>
