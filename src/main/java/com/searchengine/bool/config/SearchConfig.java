@@ -35,7 +35,7 @@ public class SearchConfig {
     private static boolean isInitialized = false;
     private static Properties properties;
 
-//    private ENV envSetting;
+    //    private ENV envSetting;
     private String keyPrefix = "";
     private boolean doLogging = true;
 

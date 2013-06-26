@@ -1,15 +1,12 @@
 package com.searchengine.bool.service;
 
-<<<<<<< HEAD
-=======
-import com.searchengine.bool.anootation.LoggingAfter;
->>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
 import com.searchengine.bool.anootation.LoggingBefore;
 import com.searchengine.bool.config.SearchConfig;
 import com.searchengine.bool.web.controller.CachedResult;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.ru.RussianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -30,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Service Layer for find satysfying
@@ -49,24 +47,18 @@ public class SearchService {
     private static IndexSearcher searcher;
     private static Analyzer analyzer;
     private static boolean isInit = false;
-    
+
 //    static {
 //
 //    }
 
 
-<<<<<<< HEAD
     public static void initialize() throws IOException {
 
-=======
-    @LoggingBefore("initialize SearchService")
-    @LoggingAfter("SearchService initialized")
-    public static void initialize() throws IOException {
->>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
         reader = DirectoryReader.open(
                 FSDirectory.open(new File(SearchConfig.getInstance().getProperty("search.index"))));
         searcher = new IndexSearcher(reader);
-        analyzer = new StandardAnalyzer(Version.LUCENE_43);
+        analyzer = new RussianAnalyzer(Version.LUCENE_43);
         CachedResult.setIndexSearcher(searcher);
         isInit = true;
     }
@@ -91,11 +83,7 @@ public class SearchService {
         BufferedReader in = null;
 
         in = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
-<<<<<<< HEAD
         QueryParser parser = new QueryParser(Version.LUCENE_43, field, analyzer);
-=======
-        QueryParser parser = new QueryParser(Version.LUCENE_40, field, analyzer);
->>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
 
 
         String line = queryStr;
@@ -120,7 +108,7 @@ public class SearchService {
 //        }
 
 
-        TopDocs results = searcher.search(query, 5 * hitsPerPage);
+        TopDocs results = searcher.search(query, null, 10 * hitsPerPage);
         ScoreDoc[] hits = results.scoreDocs;
 
         int numTotalHits = results.totalHits;
@@ -144,9 +132,9 @@ public class SearchService {
             String path = doc.get("path");
             if (path != null) {
                 System.out.println((i+1) + ". " + path);
-                String title = doc.get("title");
+                String title = doc.get("name");
                 if (title != null) {
-                    System.out.println("   Title: " + doc.get("title"));
+                    System.out.println("   Title: " + doc.get("name"));
                 }
             } else {
                 System.out.println((i+1) + ". " + "No path for this document");
@@ -163,17 +151,8 @@ public class SearchService {
     }
 
 
-<<<<<<< HEAD
     public static void createIndex() throws Exception {
 
-=======
-    @LoggingBefore("Creating index")
-    @LoggingAfter("Index created")
-    public static void createIndex() throws Exception {
-
-        logger.info("Creating index");
-        System.out.println("Creating index");
->>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
         /** Index all text files under a directory. */
         String usage = "java org.apache.lucene.demo.IndexFiles"
                 + " [-index INDEX_PATH] [-docs DOCS_PATH] [-update]\n\n"
@@ -190,32 +169,18 @@ public class SearchService {
 
         final File docDir = new File(docsPath);
         if (!docDir.exists() || !docDir.canRead()) {
-<<<<<<< HEAD
             System.out.println("Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
-=======
-            logger.error("Document directory '" + docDir.getAbsolutePath() +
-                    "' does not exist or is not readable, please check the path");
->>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
             System.exit(1);
         }
 
         Date start = new Date();
-<<<<<<< HEAD
         System.out.println("Indexing to directory '" + indexPath + "'...");
-=======
-        logger.info("Indexing to directory '" + indexPath + "'...");
->>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
 
         Directory dir = null;
 
         dir = FSDirectory.open(new File(indexPath));
-<<<<<<< HEAD
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_43);
         IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_43, analyzer);
-=======
-        Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_40);
-        IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_40, analyzer);
->>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
 
         if (create) {
             // Create a new index in the directory, removing any
@@ -249,10 +214,6 @@ public class SearchService {
 
         Date end = new Date();
         System.out.println(end.getTime() - start.getTime() + " total milliseconds");
-<<<<<<< HEAD
-=======
-        logger.info("Index created");
->>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
     }
 
     /**
@@ -318,6 +279,9 @@ public class SearchService {
                     // so that the text of the file is tokenized and indexed, but not stored.
                     // Note that FileReader expects the file to be in UTF-8 encoding.
                     // If that's not the case searching for special characters will fail.
+
+                    // add name to document/ Store this? don't index.
+                    doc.add(new StringField("name", file.getName().split("\\.")[0], Field.Store.YES));
                     doc.add(new Field("contents", new BufferedReader(new InputStreamReader(fis, "UTF-8")), Field.TermVector.WITH_POSITIONS_OFFSETS));
 
                     if (writer.getConfig().getOpenMode() == IndexWriterConfig.OpenMode.CREATE) {
@@ -328,11 +292,7 @@ public class SearchService {
                         // Existing index (an old copy of this document may have been indexed) so
                         // we use updateDocument instead to replace the old one matching the exact
                         // path, if present:
-<<<<<<< HEAD
                         System.out.println("updating " + file);
-=======
-                        logger.info("updating " + file);
->>>>>>> 0e4d93a91f960ca76f63f54f8c8ab09e7112df65
                         writer.updateDocument(new Term("path", file.getPath()), doc);
                     }
 

@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,7 +37,9 @@ public class CachedResult {
     private static String query = "";
 
     private static IndexSearcher searcher;
+
     public  static Query queryL;
+
 
     public static ScoreDoc[] getDocuments() {
         return CachedResult.documents;
@@ -104,7 +107,7 @@ public class CachedResult {
 
 //                lineInRes += doc.get("path");
                 lineInRes += fragment;
-                content.add(
+                content.add(doc.get("name") + ":" + "<br/>" +
                         StringEscapeUtils.escapeHtml(
                                 lineInRes  ));
             }
